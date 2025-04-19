@@ -11,6 +11,7 @@ body {
 
 html {
     font-size: 16px;
+    scroll-behavior: smooth; /* scroll suave */
 }
 
 body::before {
@@ -72,11 +73,17 @@ nav {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.menu.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-in-out;
+    z-index: 1001; /* Mayor que el header y el overlay */
+}
+
 .a-menu {
     border-bottom: 2px solid transparent;
     padding: 10px 0px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.75rem;
+    font-size: 1rem;
     text-align: center;
 }
 
@@ -504,8 +511,8 @@ ul {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    justify-content: center;
+    gap: 30px;
+    justify-content:space-between;
     align-items: center;
     width: 300px;
     height: 350px;
@@ -532,6 +539,7 @@ ul {
 .proyecto:hover::before {
     opacity: 1;
 }
+
 .texto {
     width: 90%;
     position: absolute;
@@ -544,9 +552,10 @@ ul {
     transition: opacity 0.3s, visibility 0.3s;
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    justify-content: center;
-    align-items:center;
+    justify-content: space-between;
+    align-items: center;
+    height: 80%;
+    padding: 20px 0;
 }
 
 .proyecto:hover .texto {
@@ -557,6 +566,47 @@ ul {
 .texto h3 {
     font-size: 1.75rem;
     font-weight: lighter;
+    margin-bottom: 10px;
+}
+
+.texto p {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px 0;
+    font-size: 1rem;
+    max-height: 150px;
+}
+
+.btn-pdf {
+    width: 60%;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #205ff1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+}
+
+.btn-pdf:hover {
+    background-color: #8BD2E8;
+}
+
+.btn-github {
+    width: 60%;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+}
+
+.btn-github:hover {
+    background-color: #6cc644; /* Color verde de GitHub */
 }
 
 #proyecto1 {
@@ -601,38 +651,6 @@ ul {
     background-repeat: no-repeat;
 }
 
-.btn-pdf {
-    width: 60%;
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #205ff1;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-pdf:hover {
-    background-color: #8BD2E8;
-}
-
-.btn-github {
-    width: 60%;
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-github:hover {
-    background-color: #6cc644; /* Color verde de GitHub */
-}
-
 
 
 /* SECCION 5 - CONTACTO */
@@ -659,7 +677,7 @@ ul {
     text-align: center;
     display: flex;
     flex-direction: column;
-   gap: 30px;
+    gap: 30px;
     justify-content:center;
     align-items: center;
 }
@@ -673,7 +691,7 @@ ul {
 }
 
 #contacto-mensaje p {
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-family:  sans-serif;
     font-weight: lighter;
 }
@@ -722,7 +740,7 @@ form {
     border-bottom: 1px solid #ffffffc5;
     background-color: transparent;
     color: #ffffff;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-family:  sans-serif;
     font-weight: lighter;
 }
@@ -799,6 +817,19 @@ footer {
     background-color: #fff;
 }
 
+/* Estilo que opaca todo el contenido cuando el menú está abierto */
+#menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con opacidad del 70% */
+    z-index: 900; /* Menor que el header (1000) pero mayor que el resto */
+    transition: opacity 0.3s ease;
+}
+
 
 /*MEDIA QUERIES*/
 @media screen and (max-width: 1150px) {
@@ -843,10 +874,11 @@ footer {
     }
 }
 
-@media screen and (width <= 820px) { /* Media query para pantallas pequeñas */
+@media screen and (max-width: 820px) { 
     html {
-        font-size: 12px;
+        font-size: 14px; 
     }
+    
     .menu {
         display: none;
         flex-direction: column;
@@ -855,60 +887,329 @@ footer {
         position: absolute;
         top: 100px;
         right: 0;
-        border: 1px  solid #ffffff;
+        border: 1px solid #ffffff;
+        padding: 15px 0; 
     }
-
+    
     .menu.active {
         display: flex;
+        animation: fadeIn 0.3s ease-in-out;
     }
-
+    
+    .a-menu {
+        font-size: 1rem; 
+        padding: 15px 0; 
+    }
+    
+    /* Añadir estilo para el botón de cerrar el menú */
+    .close-menu {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        cursor: pointer;
+    }
+    
     .hamburger-menu {
         display: flex;
+        width: 35px; 
+        height: 35px;
     }
-
-    #profesion h3{
+    
+    .hamburger-menu span {
+        height: 4px; /* Líneas más gruesas para el menú hamburguesa */
+    }
+    
+    #profesion h3 {
         gap: 12px;
+        font-size: 1.4rem; /* Nombre más grande */
     }
-
-    #span1 {
+    
+    #profesion p {
+        font-size: 1.2rem; /* Rol profesional más grande */
+        padding: 10px; /* Más padding para mejor visibilidad */
+    }
+    
+    #span1, #span2 {
         color: #fff;
         text-shadow: 0 1px 4px #000;
     }
-
-    #span2 {
-        color: #fff; 
-        text-shadow: 0 1px 4px #000;
+    
+    #acerca-de-mi h3 {
+        text-align: center;
     }
-
+    #acerca-de-mi p {
+        font-size: 1.1rem; /* Texto más grande */
+        line-height: 1.5rem; /* Mayor espacio entre líneas */
+        text-align: center; /* Justificamos el texto */
+    }
+    /* Ajustamos el tamaño de las tarjetas de proyecto */
     .proyecto {
         width: calc(100% - 20px);
+        height: 400px; /* Tarjetas más altas para mejor visibilidad del contenido */
     }
-
+    
+    .texto h3 {
+        font-size: 2rem; /* Títulos de proyecto más grandes */
+    }
+    
+    .texto p {
+        font-size: 1.1rem; /* Texto más grande en descripciones */
+        line-height: 1.5; /* Mayor espacio entre líneas */
+    }
+    
+    .btn-pdf, .btn-github {
+        width: 80%; /* Botones más anchos */
+        padding: 15px 20px; /* Botones más altos para mejor accesibilidad táctil */
+        font-size: 1.1rem; /* Texto más grande en botones */
+    }
+    
     #parrafo-portafolio {
-        width: 80%;
+        width: 90%;
+        font-size: 1.1rem; /* Párrafo de portafolio más grande */
     }
-
+    
     #seccion-titulo {
         width: 90%;
     }
+    
     #celes {
         width: 85%;
-    } 
+    }
     
-
     #contacto {
         flex-direction: column;
-        width: auto;
+        width: 90%; /* Ajustamos ancho del formulario */
     }
-
+    
     #contacto-mensaje {
-        width: 50%;
+        width: 80%; /* Más ancho para el mensaje de contacto */
     }
-
-    #contacto form {
-        width: 50%;
+    
+    #contacto-mensaje p {
+        font-size: 1rem; /* Texto más grande */
+    }
+    
+    form {
+        width: 80%; /* Formulario más ancho para mejor experiencia */
+    }
+    
+    .form-group input, 
+    .form-group textarea {
+        font-size: 1rem; /* Campos de formulario más grandes */
+        padding: 15px; /* Más espacio para escribir */
+    }
+    
+    .form-group label {
+        font-size: 1.1rem; /* Etiquetas más grandes */
+    }
+    
+    ::placeholder {
+        font-size: 1rem; /* Texto de marcador de posición más grande */
+    }
+    
+    .form-group button {
+        padding: 12px; /* Botón de envío más grande */
+        font-size: 1.1rem; /* Texto del botón más grande */
+    }
+    
+    .redes {
+        width: 2.5rem; /* Iconos de redes sociales más grandes */
+        height: 2.5rem;
     }
 }
+
+/* Media query para dispositivos muy pequeños (móviles) */
+@media screen and (width <= 480px) {
+    html {
+        font-size: 14px; /* Aumentamos aún más el tamaño base */
+    }
+    
+    .imagenes-logo {
+        padding-left: 20px; /* Reducimos el padding del logo */
+    }
+    
+    #logo {
+        width: 80px; /* Logo más pequeño */
+    }
+    
+    #triangulo {
+        width: 50px; /* Triángulo más pequeño */
+    }
+    
+    .hamburger-menu {
+        right: 20px; /* Movemos el menú hamburguesa más a la derecha */
+    }
+    
+    .menu {
+        width: 100%; /* Menú más ancho */
+    }
+    
+    /* Sección principal */
+    .principal {
+        width: 95%; /* Más ancho */
+        gap: 20px; /* Menos espacio entre elementos */
+    }
+    
+    #seccion-titulo h1 {
+        font-size: 2.5rem; /* Título más pequeño pero legible */
+    }
+    
+    /* Tarjetas de proyecto */
+    .proyecto {
+        width: 100%; /* Ocupar todo el ancho disponible */
+        height: 350px; /* Ajustamos altura */
+        margin-bottom: 30px; /* Más espacio entre tarjetas */
+    }
+    
+    .texto {
+        height: 90%; /* Más espacio para el texto */
+    }
+    
+    /* Sección de Acerca de Mi */
+    #caricatura {
+        width: 80%; /* Imagen más grande */
+    }
+    
+    #texto-acerca-de-mi {
+        width: 90%; /* Texto más ancho */
+        padding: 10px;
+    }
+
+    #texto-acerca-de-mi h3 {
+        text-align: center;
+    }
+    #texto-acerca-de-mi p {
+        font-size: 1rem; /* Texto más grande */
+        line-height: 1.5rem; /* Mayor espacio entre líneas */
+        text-align: center; /* Justificamos el texto */
+    }
+    
+    /* Sección de tecnologías */
+    .tecno {
+        width: 5rem; /* Tarjetas de tecnología más pequeñas */
+        height: 5rem;
+    }
+    
+    /* Formulario de contacto */
+
+    #contacto-mensaje {
+        width: 90%; /* Más ancho */
+        margin: 20px auto; /* Menos margen */
+    }
+    #contacto-mensaje, form {
+        width: 80%; 
+    }
+    
+    .form-group {
+        width: 100%; /* Campos de formulario a ancho completo */
+    }
+}
+
+@media screen and (width <= 380px) {
+    html {
+        font-size: 13px; /* Tamaño base más pequeño */
+    }
+    
+    .imagenes-logo {
+        padding-left: 10px; /* Reducimos aún más el padding del logo */
+    }
+    
+    #logo {
+        width: 70px; /* Logo más pequeño */
+    }
+    
+    #triangulo {
+        width: 40px; /* Triángulo más pequeño */
+    }
+    
+    .hamburger-menu {
+        right: 10px; /* Movemos el menú hamburguesa más a la derecha */
+    }
+
+    #seccion-titulo a {
+        font-size: 1rem;
+    }
+    #acerca-de-mi {
+        width: 95%; 
+        margin: 5% auto;
+    }
+
+    #contenido-acerca-de-mi {
+        width: 95%; /* Más ancho */
+        gap: 20px; /* Menos espacio entre elementos */
+    }
+    #caricatura {
+        width: 90%; /* Imagen más grande */
+    }
+    #texto-acerca-de-mi {
+        width: 95%; /* Texto más ancho */
+        padding: 5px;
+    }
+
+    #texto-acerca-de-mi p {
+        font-size: 1.1rem; /* Texto más grande */
+        line-height: 1.3rem; /* Mayor espacio entre líneas */
+        text-align: center; /* Justificamos el texto */
+    }
+
+    /* Sección de tecnologías */
+    #conocimientos {
+        width: 95%; /* Más ancho */
+        margin: 5% auto;
+    }
+    .tecno h3{
+        font-size: 0.8rem; /* Texto más grande */
+    }
+    .soft {
+        font-size: 0.9rem; /* Texto más grande */
+    }
+
+    /* Sección de portafolio */
+    #portafolio {
+        width: 95%; /* Más ancho */
+        margin: 5% auto;
+    }
+    #portafolio-sombra {
+        width: 95%; /* Más ancho */
+    }
+
+    #contacto {
+        width: 95%; /* Más ancho */
+        margin: 5% auto;
+    }
+    #contacto-mensaje {
+        width: 95%; /* Más ancho */
+        margin: 5% auto;
+    }
+    #contacto-mensaje p {
+        font-size: 1.1rem; /* Texto más grande */
+        line-height: 1.3rem; /* Mayor espacio entre líneas */
+        text-align: center; /* Justificamos el texto */
+    }
+    form {
+        width: 80%;
+        margin: 5% auto;
+    }
+}
+
+/* Estilo para cuando el menú está abierto */
+.menu-open::before {
+    opacity: 0.5; /* Reduce la opacidad del fondo cuando el menú está abierto */
+    transition: opacity 0.3s ease;
+}
+
+@keyframes fadeIn { /* Animación para el menú */
+    from { /* Estado inicial */
+        opacity: 0; /* Invisible */
+        transform: translateY(-20px); /* Desplazado hacia arriba */
+    }
+    to { /* Estado final */
+        opacity: 1; /* Visible */
+        transform: translateY(0); /* En su posición original */
+    }
+}
+
+
 
 
 

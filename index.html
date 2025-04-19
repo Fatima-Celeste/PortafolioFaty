@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Overlay para opacar el contenido cuando el menú está abierto -->
+    <div id="menu-overlay"></div>
+    
     <header>
         <div class="imagenes-logo">
             <a class="enlace-logo" href="#inicio">
@@ -122,10 +125,6 @@
                     <h3>G. Analytics</h3>
                     <img src="imagenes/icons/analytics.png" clas="tecno-logo" alt="Icono de Sketch">
                 </div>
-                <div class="tecno">
-                    <h3>Otro</h3>
-                    <img src="imagenes/icons/figma.png" clas="tecno-logo" alt="Icono de Illustrator">
-                </div>
             </div>
         </div>
         <div id="soft-skills">
@@ -193,22 +192,24 @@
                         <p>Corazones Mágicos es un sitio web que ofrece recursos para combatir el abuso sexual infantil. 
                             En este proyecto, realicé el diseño de la interfaz de usuario y la experiencia de usuario. 
                             Utilicé Figma para crear los prototipos y realizar pruebas de usabilidad.</p>
-                            <a href="pdfs/Portfolio Project 3 - Corazones mágicos (1).pdf" target="_blank" class="btn-pdf">Ver en PDF</a>
+                        <a href="pdfs/Portfolio Project 3 - Corazones mágicos (1).pdf" target="_blank" class="btn-pdf">Ver en PDF</a>
                     </div>
                 </div>
                 <div class="proyecto" id="proyecto2">
                     <div class="texto">
-                        <h3>Corazones Mágicos</h3>
-                        <p>
-                            Corazones Mágicos es un sitio web que ofrece recursos para combatir el abuso sexual infantil. 
-                            En este proyecto, realicé el diseño de la interfaz de usuario y la experiencia de usuario. 
-                        </p>
+                        <h3>Página de producto</h3>
+                        <p>Este proyecto consiste en una página de producto para una tienda de ropa. 
+                            El objetivo es mostrar el producto de manera atractiva y facilitar la compra 
+                            a los usuarios. Utilicé Figma para crear el prototipado y el diseño de la interfaz.</p>
+                        <a href="pdfs/Portfolio Project 4 - Página de producto.pdf" target="_blank" class="btn-pdf">Ver en PDF</a>
                     </div>
                 </div>
                 <div class="proyecto" id="proyecto3">
                     <div class="texto">
                         <h3>Sudaderas Personalizadas</h3>
-                        <p>Sitio web para hacer pedidos al mayoreo de sudaderas personalizadas, con facilidad de navegación.</p>
+                        <p>Este proyecto consiste en un sitio web para una tienda de sudaderas personalizadas. 
+                            El objetivo es permitir a los usuarios personalizar sus sudaderas y realizar pedidos 
+                            en línea. Utilicé Figma para crear el prototipado y el diseño de la interfaz.</p>
                         <a href="pdfs/Portfolio Project 2 - Sitio web sudaderas personalizadas.pdf" target="_blank" class="btn-pdf">Ver en PDF</a>
                     </div>
                 </div>
@@ -221,7 +222,7 @@
                             y al finalizar, al dar click al botón "Sortear Amigo" se 
                             seleccionará uno de los nombres de la lista de amigos de 
                             forma aleatoria, mostrando el nombre del amigo sorteado en la pantalla.</p>
-                            <a href="https://fatima-celeste.github.io/Amigo-secreto/" target="_blank" class="btn-github">Ver en GitHub</a>                            
+                        <a href="https://fatima-celeste.github.io/Amigo-secreto/" target="_blank" class="btn-github">Ver en GitHub</a>                            
                     </div>
                 </div>
                 <div class="proyecto" id="proyecto5">
@@ -300,13 +301,78 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const menu = document.querySelector('.menu');
-
-    hamburgerMenu.addEventListener('click', function() {
-        menu.classList.toggle('active');
-    });
-});
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const menu = document.querySelector('.menu');
+            const menuItems = document.querySelectorAll('.menu a');
+            const body = document.body;
+            const menuOverlay = document.getElementById('menu-overlay');
+            
+            // Función para abrir/cerrar el menú
+            function toggleMenu() {
+                menu.classList.toggle('active');
+                
+                // Agregar/quitar la clase para el fondo opaco
+                if (menu.classList.contains('active')) {
+                    body.classList.add('menu-open');
+                    menuOverlay.style.display = 'block'; // Mostrar el overlay
+                } else {
+                    body.classList.remove('menu-open');
+                    menuOverlay.style.display = 'none'; // Ocultar el overlay
+                }
+            }
+            
+            // Función para cerrar el menú
+            function closeMenu() {
+                menu.classList.remove('active');
+                body.classList.remove('menu-open');
+                menuOverlay.style.display = 'none'; // Ocultar el overlay
+            }
+            
+            // Evento clic para el botón de hamburguesa
+            hamburgerMenu.addEventListener('click', function(event) {
+                event.stopPropagation(); // Evitar que el clic se propague al documento
+                toggleMenu();
+            });
+            
+            // Cerrar el menú al hacer clic en un elemento
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(event) {
+                    // Prevenir el comportamiento predeterminado
+                    event.preventDefault();
+                    
+                    // Cerrar menú
+                    closeMenu();
+                    
+                    // Obtener el destino del enlace
+                    const targetId = this.getAttribute('href');
+                    
+                    // Scroll suave a la sección
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 100, // Ajustar por altura del header
+                            behavior: 'smooth' // Scroll suave
+                        });
+                    }
+                });
+            });
+            
+            // Cerrar el menú al hacer clic en el overlay
+            menuOverlay.addEventListener('click', closeMenu);
+            
+            // Cerrar el menú al hacer clic en cualquier parte del documento
+            document.addEventListener('click', function(event) {
+                // Verificar que el clic no fue dentro del menú o en el botón de hamburguesa
+                if (!menu.contains(event.target) && event.target !== hamburgerMenu) {
+                    closeMenu();
+                }
+            });
+            
+            // Evitar que los clics en el menú cierren el menú
+            menu.addEventListener('click', function(event) {
+                event.stopPropagation(); // Evitar que el clic se propague al documento
+            });
+        });
     </script>
 </body>
 </html>
